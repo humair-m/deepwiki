@@ -1,4 +1,4 @@
-# Configuration for Documentation API
+# configs.yaml
 api:
   base_url: "https://text.pollinations.ai/openai/v1/chat/completions"
   token: "16VFCmZKXdSxDlpU"
@@ -6,6 +6,7 @@ api:
   default_model: "gpt-4o"
   default_temperature: 0.7
   max_tokens: 12000
+  timeout: 30.0
 
 database:
   path: "llm_docs.db"
@@ -16,3 +17,64 @@ logging:
   level: "INFO"
   file: "doc_api.log"
   format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+prompts:
+  markdown:
+    typescript: |
+      Generate **comprehensive documentation** in **GitHub-flavored Markdown**:
+      ```typescript
+      {code_content}
+      ```
+      Include:
+      ## 📄 Module Overview
+      - **Purpose**: Script/module purpose
+      - **Category**: e.g., API Client, Utility
+      - **Key Features**: Major capabilities
+      
+      ## 🧠 Function/Class Documentation
+      For each:
+      ### 🧾 Signature
+      ```typescript
+      {signature}
+      ```
+      ### 📥 Parameters
+      | Name | Type | Required | Default | Description |
+      |------|------|----------|---------|-------------|
+      {parameters}
+      ### 📤 Returns
+      | Type | Description |
+      |------|-------------|
+      {returns}
+      ### ⚠️ Raises
+      | Exception | Condition |
+      |-----------|-----------|
+      {raises}
+      ### 💻 Example Usage
+      ```typescript
+      {example}
+      ```
+      ## 🧪 Edge Cases & Error Handling
+      | Edge Case | Expected Behavior |
+      |-----------|-------------------|
+      {edge_cases}
+      ## 💡 Notes & Best Practices
+      - **Dependencies**: {dependencies}
+      - **Limitations**: {limitations}
+      - **Best Practices**: {best_practices}
+      ## 📊 Mermaid Flowchart
+      ```mermaid
+      {flowchart}
+      ```
+    python: |
+      ... (similar template for Python)
+  json: |
+    Generate structured JSON documentation:
+    ```{lang}
+    {code_content}
+    ```
+    Include:
+    - "module": {"purpose": str, "category": str, "key_features": list}
+    - "functions": [{"signature": str, "parameters": list, ...}]
+    - "edge_cases": [{"case": str, "behavior": str}]
+    - "notes": {"dependencies": list, ...}
+    - "flowchart": str
