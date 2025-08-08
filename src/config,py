@@ -1,0 +1,53 @@
+# config.py
+import yaml
+import logging
+from pathlib import Path
+from typing import Dict, Any
+
+class ConfigLoader:
+    _instance = None
+    _config = None
+    
+    def __new__(cls, config_path: str = "configs.yaml"):
+        if not cls._instance:
+            cls._instance = super().__new__(cls)
+            cls._instance.load_config(config_path)
+        return cls._instance
+    
+    def load_config(self, config_path: str):
+        try:
+            with open(config_path, 'r') as f:
+                self._config = yaml.safe_load(f)
+            self._setup_logging()
+        except Exception as e:
+            logging.error(f"Config load error: {e}")
+            raise
+    
+    def _setup_logging(self):
+        logging_config = self._config.get('logging', {})
+        logging.basicConfig(
+            level=logging_config.get('level', 'INFO'),
+            format=logging_config.get('format', '%(asctime)s - %(name)s - %(levelname)s - %(message)s'),
+            handlers=[
+                logging.FileHandler(logging_config.get('file', 'doc_api.log')),
+                logging.StreamHandler()
+            ]
+        )
+    
+    @property
+    def api_config(self) -> Dict[str, Any]:
+        return self._config.get('api', {})
+    
+    @property
+    def db_config(self) -> Dict[str, Any]:
+        return self._config.get('database', {})
+    
+    @property
+    def prompts(self) -> Dict[str, Any]:
+        return self._config.get('prompts', {})
+    
+    def get_prompt(self, output_format: str, lang: str) -> str:
+        return self.prompts.get(output_format, {}).get(lang, "")
+
+# Initialize on import
+CONFIG = ConfigLoader()
