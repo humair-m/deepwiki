@@ -79,7 +79,7 @@ class BatchProcessor:
             "results": results
         }
 
-def main():
+"""def main():
     processor = BatchProcessor(
         workspace="/path/to/project",
         include=["*.ts", "*.tsx"],
@@ -93,4 +93,4 @@ def main():
     )
 
 if __name__ == "__main__":
-    main()
+    main()"""
